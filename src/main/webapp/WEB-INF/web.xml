@@ -2,6 +2,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1" metadata-complete="true">
+  <locale-encoding-mapping-list>
+    <locale-encoding-mapping>
+      <locale>zh</locale>
+      <encoding>UTF-8</encoding>
+    </locale-encoding-mapping>
+  </locale-encoding-mapping-list>
 
   <!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
   <context-param>
@@ -23,7 +29,7 @@
   </filter>
   <filter-mapping>
     <filter-name>characterEncodingFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/</url-pattern>
   </filter-mapping>
 
   <!-- 如果是用mvn命令生成的xml，需要修改servlet版本为3.1 -->

@@ -14,9 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-@RestController
+@Controller
 public class BookController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -24,20 +25,34 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
+//	使用@ResponseBody返回json数据
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public  @ResponseBody String list() {
+	public @ResponseBody  List<Book> list() {
 		List<Book> list = bookService.getList();
-		return "list";
+		return list;
 	}
-
+	//	使用@ResponseBody返回json数据
+	@RequestMapping(value = "/word", method = RequestMethod.GET)//, produces={"text/html;charset=UTF-8;","application/json;"}
+	public @ResponseBody  String word() {
+		return "我是中文";
+	}
+// 没写@ResponseBody 跳转到视图或者链接
 	@RequestMapping(value = "/{bookId}/detail", method = RequestMethod.GET)
 	private String detail(@PathVariable("bookId") Long bookId, Model model) {
-		if (bookId == null) {
-			return "redirect:/book/list";
+		if (bookId == 1) {
+			return "redirect:/list";
+		}
+		if (bookId == 2) {
+			System.out.println("我是中文");
+			System.out.println("aaa");
+			return "redirect:/list";
+		}
+		if (bookId == 3) {
+			return "redirect:/word";
 		}
 		Book book = bookService.getById(bookId);
 		if (book == null) {
-			return "forward:/book/list";
+			return "forward:/list";
 		}
 		model.addAttribute("book", book);
 		return "detail";
