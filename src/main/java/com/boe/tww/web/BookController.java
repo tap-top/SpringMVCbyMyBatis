@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -25,19 +24,28 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
-//	使用@ResponseBody返回json数据
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody  List<Book> list() {
+    //	使用@ResponseBody返回json数据
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public @ResponseBody  List<Book> list() {
+        List<Book> list = bookService.getList();
+        return list;
+    }
+	//	使用@ResponseBody返回json数据
+	@RequestMapping(value = "/listByAAA", method = RequestMethod.GET)
+	public @ResponseBody  List<Book> list(@RequestParam(required = true) String aaa) {
+		System.out.printf(aaa);
 		List<Book> list = bookService.getList();
 		return list;
 	}
 	//	使用@ResponseBody返回json数据
 	@RequestMapping(value = "/word", method = RequestMethod.GET)//, produces={"text/html;charset=UTF-8;","application/json;"}
 	public @ResponseBody  String word() {
-		return "我是中文";
+		return "哈哈哈成功了";
 	}
-// 没写@ResponseBody 跳转到视图或者链接
+	// 没写@ResponseBody 跳转到视图或者链接
 	@RequestMapping(value = "/{bookId}/detail", method = RequestMethod.GET)
+	//private String detail(@RequestParam(required = true) Long bookId) {
+	//?bookId=11
 	private String detail(@PathVariable("bookId") Long bookId, Model model) {
 		if (bookId == 1) {
 			return "redirect:/list";
@@ -59,8 +67,7 @@ public class BookController {
 	}
 
 	// ajax json
-	@RequestMapping(value = "/{bookId}/appoint", method = RequestMethod.POST, produces = {
-			"application/json; charset=utf-8" })
+	@RequestMapping(value = "/{bookId}/appoint", method = RequestMethod.POST, produces = {"application/json; charset=utf-8" })
 	@ResponseBody
 	private Result<AppointExecution> appoint(@PathVariable("bookId") Long bookId, @RequestParam("studentId") Long studentId) {
 		if (studentId == null || studentId.equals("")) {
